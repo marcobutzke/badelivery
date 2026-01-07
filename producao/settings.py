@@ -3,9 +3,9 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p@tqa*bcllz4t+siya9g4_dwh*-5)0s7!et0_njw(%lspsfmto'
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'simpleui',
@@ -47,27 +47,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'producao.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'delivery',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'postgres',
-#        'USER': 'postgres.imewrseyfhbxprzvxwrt',
-#        'PASSWORD': 'Innverness#30',
-#        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
-#        'PORT': '6543',
+#        'NAME': 'delivery',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
 #    }
 #}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres.imewrseyfhbxprzvxwrt',
+        'PASSWORD': 'Innverness#30',
+        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
+        'PORT': '6543',
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
