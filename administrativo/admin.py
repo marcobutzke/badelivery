@@ -58,7 +58,7 @@ class Indicador(admin.ModelAdmin):
 
 @admin.register(Conta)
 class Conta(admin.ModelAdmin):
-    list_display = ('codigo', 'descricao', 'natureza', 'nivel', 'tipo')
+    list_display = ('codigo', 'descricao', 'natureza', 'nivel', 'tipo', 'saldoinicial')
     list_filter = ('natureza', 'nivel', 'tipo',)
     search_fields = ('descricao',)
     ordering = ('codigo',)

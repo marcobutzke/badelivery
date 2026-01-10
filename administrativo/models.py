@@ -96,6 +96,7 @@ class Conta(models.Model):
     natureza = models.CharField(max_length=20, choices=tipo_natureza, default='Débito')
     nivel = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     tipo = models.CharField(max_length=20, choices=tipo_conta, default='Sintética')
+    saldoinicial = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
