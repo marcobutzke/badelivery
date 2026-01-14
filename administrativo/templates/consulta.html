@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <div class="flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg w-full lg:w-3/4">
+                <h1 class="text-4xl">Consulta</h1>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

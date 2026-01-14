@@ -3,7 +3,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p@tqa*bcllz4t+siya9g4_dwh*-5)0s7!et0_njw(%lspsfmto'
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -15,7 +15,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'administrativo'
+    'administrativo',
+    'allauth_ui',
+    'allauth',
+    'allauth.account',
+    'widget_tweaks',
+    'slippers',
+]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 MIDDLEWARE = [
@@ -26,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'producao.urls'
@@ -40,6 +54,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -47,27 +62,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'producao.wsgi.application'
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'delivery',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-#}
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres.imewrseyfhbxprzvxwrt',
-        'PASSWORD': 'Innverness#30',
-        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
-        'PORT': '6543',
+        'NAME': 'delivery',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'postgres',
+#        'USER': 'postgres.imewrseyfhbxprzvxwrt',
+#        'PASSWORD': 'Innverness#30',
+#        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
+#        'PORT': '6543',
+#    }
+#}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -92,6 +107,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ALLAUTH_UI_THEME = 'silk'
+
 SIMPLEUI_DEFAULT_THEME = 'orange.css'
 SIMPLEUI_CONFIG = {
     'system_name': 'Biano Alimentos',

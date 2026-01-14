@@ -1,0 +1,20 @@
+  <nav class="navbar bg-base-100">
+    <a class="btn btn-ghost text-xl">Biano Alimentos</a>
+
+    {% if user.is_authenticated %}
+        <!-- User is authenticated: Show Logout button -->
+        <a href="{% url 'index' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Geral</a>
+        <a href="{% url 'clientes' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Clientes</a>
+        <a href="{% url 'produtos' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Produtos</a>
+        <a href="{% url 'entregas' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Entregas</a>
+        <a href="{% url 'financeiro' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Financeiro</a>
+        <a href="{% url 'resultado' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Resultado</a>
+        <a href="{% url 'producao' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Produção</a>
+        <a href="{% url 'consulta' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Consulta</a>
+        <a href="{% url 'admin:index' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Administrador</a>
+        <a href="{% url 'account_logout' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Logout</a>
+    {% else %}
+        <!-- User is not authenticated: Show Login and Register links -->
+        <a href="{% url 'account_login' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Login</a>
+    {% endif %}
+</nav>
