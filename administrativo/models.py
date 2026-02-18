@@ -136,7 +136,6 @@ class Ingrediente(models.Model):
         return self.descricao
 
 class Acessorio(models.Model):
-    sigla = models.CharField(max_length=10)
     descricao = models.CharField(max_length=50)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     estoque = models.IntegerField()
@@ -144,6 +143,7 @@ class Acessorio(models.Model):
     quantidade = models.IntegerField()
     unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
     porcao = models.IntegerField(default=1)
+    modopreparo = models.TextField()
 
     class Meta:
         managed = False
@@ -171,13 +171,14 @@ class Produto(models.Model):
     quantidade = models.IntegerField()
     unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
     porcao = models.IntegerField(default=1)
+    modopreparo = models.TextField()
 
     class Meta:
         managed = False
         db_table = 'produto'
 
     def __str__(self):
-        return self.descricao
+        return f"{self.sigla}-{self.descricao}"
 
 class Composicao(models.Model):
     produto = models.ForeignKey(Produto, models.DO_NOTHING)
@@ -226,8 +227,9 @@ class Periodo(models.Model):
 
 class Compra(models.Model):
     tipo_pago = (
-        ('ABERTO', 'Aberto'),
-        ('PAGO', 'Pago'),
+        ('ABERTA', 'Aberta'),
+        ('FECHADA', 'Fechada'),
+        ('PAGA', 'Paga'),
     )
     data = models.DateField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -274,15 +276,18 @@ class Manufatura(models.Model):
 class Pedido(models.Model):
     tipo_pago = (
         ('ABERTO', 'Aberto'),
+        ('FECHADO', 'Fechado'),
+        ('ENTREGUE', 'Entregue'),
         ('PAGO', 'Pago'),
     )
+    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+    numero = models.CharField(max_length=10)
     data = models.DateField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     cliente = models.ForeignKey(Cliente, models.DO_NOTHING)
     previsao = models.DateTimeField(blank=True, null=True)
     entrega = models.DateTimeField(blank=True, null=True)
     situacao = models.CharField(max_length=20, choices=tipo_pago, default='Aberto')
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
 
     class Meta:
         managed = False

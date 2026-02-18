@@ -1,24 +1,17 @@
 import pandas as pd
+import plotly.graph_objects as go
 import plotly.express as px
 
+from .models import Acessorio
 
 def chart_example():
-    df = pd.DataFrame(
-        {
-            'Fruit': ['Apples', 'Oranges', 'Bananas', 'Apples', 'Oranges', 'Bananas'],
-            'Amount': [4, 1, 2, 3, 4, 5],
-            'City': ['SP', 'SP', 'SP', 'RJ', 'RJ', 'RJ']
-        }
-    )
-    return px.bar(
-        df,
-        x='Fruit',
-        y='Amount',
-        color='City',
-        title='Fruit Amounts',
-        color_discrete_sequence=px.colors.qualitative.T10,
-        width=500,
-        height=500,
-        template="simple_white",
-    ).to_html()
+    df_acessorio = pd.DataFrame(list(Acessorio.objects.all().values()))
+    return go.Figure(data=[go.Table(
+        header=dict(values=list(df_acessorio.columns),
+                    fill_color='lightskyblue',
+                    align='left'),
+        cells=dict(values=[df_acessorio[col] for col in df_acessorio.columns],
+                   fill_color='lightcyan',
+                   align='left'))
+    ]).to_html()
 

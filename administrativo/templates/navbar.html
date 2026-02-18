@@ -1,20 +1,45 @@
-  <nav class="navbar bg-base-100">
-    <a class="btn btn-ghost text-xl">Biano Alimentos</a>
-
+<div class="navbar bg-red-700 shadow-sm">
     {% if user.is_authenticated %}
-        <!-- User is authenticated: Show Logout button -->
-        <a href="{% url 'index' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Geral</a>
-        <a href="{% url 'clientes' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Clientes</a>
-        <a href="{% url 'produtos' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Produtos</a>
-        <a href="{% url 'entregas' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Entregas</a>
-        <a href="{% url 'financeiro' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Financeiro</a>
-        <a href="{% url 'resultado' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Resultado</a>
-        <a href="{% url 'producao' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Produção</a>
-        <a href="{% url 'consulta' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Consulta</a>
-        <a href="{% url 'admin:index' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Administrador</a>
-        <a href="{% url 'account_logout' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Logout</a>
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="White" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
+                </div>
+                <ul
+                    tabindex="-1"
+                    class="menu menu-sm dropdown-content bg-red-700 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li><a href="{% url 'index' %}" class="text-base text-white">Início</a></li>
+                    <li></li>
+                    <li><a href="{% url 'clientes' %}" class="text-base text-white">Clientes</a></li>
+                    <li><a href="{% url 'produtos' %}" class="text-base text-white">Produtos</a></li>
+                    <li><a href="{% url 'entregas' %}" class="text-base text-white">Entregas</a></li>
+                    <li><a href="{% url 'producao' %}" class="text-base text-white">Produção</a></li>
+                    <li></li>
+                    <li><a href="{% url 'financeiro' %}" class="text-base text-white">Financeiro</a></li>
+                    <li><a href="{% url 'resultado' %}" class="text-base text-white">Resultado</a></li>
+                    <li></li>
+                    <li><a href="{% url 'consulta' %}" class="text-base text-white">Consulta</a></li>
+                    <li></li>
+                    <li><a href="{% url 'admin:index' %}" class="text-base text-white">Administração</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a class="btn btn-ghost text-xl text-white">Biano Gourmet</a>
+        </div>
+        <div class="navbar-end">
+            <a href="{% url 'account_logout' %}" class="text-base text-white">Logout</a>
+        </div>
     {% else %}
-        <!-- User is not authenticated: Show Login and Register links -->
-        <a href="{% url 'account_login' %}" class="text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md">Login</a>
+        <div class="navbar-start">
+            <a class="btn btn-ghost text-xl text-white">-</a>
+        </div>
+        <div class="navbar-center">
+            <a class="btn btn-ghost text-xl text-white">Biano Gourmet</a>
+        </div>
+        <div class="navbar-end">
+            <a href="{% url 'account_login' %}"  class="text-base text-white">Login</a>
+            <a class="btn btn-ghost text-xl text-white">-</a>
+        </div>
     {% endif %}
-</nav>
+</div>

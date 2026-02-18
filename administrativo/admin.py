@@ -4,7 +4,7 @@ admin.site.site_header = 'Biano Alimentos'  # set header
 admin.site.site_title = 'Biano Alimentos'   # set title
 admin.site.index_title = 'Delivery'
 
-from administrativo.models import *
+from .models import *
 
 @admin.register(Categoria)
 class Categoria(admin.ModelAdmin):
@@ -86,7 +86,7 @@ class ComponenteInline(admin.StackedInline):
 
 @admin.register(Acessorio)
 class Acessorio(admin.ModelAdmin):
-    list_display = ('sigla', 'descricao', 'valor', 'estoque', 'ativo', 'quantidade', 'unidade', 'porcao', )
+    list_display = ('descricao', 'valor', 'estoque', 'ativo', 'quantidade', 'unidade', 'porcao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
     inlines = [ComponenteInline]
@@ -109,8 +109,8 @@ class PrecoInline(admin.StackedInline):
 class Produto(admin.ModelAdmin):
     list_display = ('sigla', 'descricao', 'estoque', 'ativo', 'categoria', 'quantidade', 'unidade', 'porcao',)
     list_filter = ('categoria',)
-    search_fields = ('descricao',)
-    ordering = ('descricao',)
+    search_fields = ('sigla', 'descricao',)
+    ordering = ('sigla',)
     inlines = [ComposicaoInline, FormacaoInline, PrecoInline]
     list_per_page = 15
 
@@ -156,8 +156,9 @@ class ItemInline(admin.StackedInline):
 
 @admin.register(Pedido)
 class Pedido(admin.ModelAdmin):
-    list_display = ('data', 'valor', 'cliente', 'previsao', 'entrega', 'situacao', 'periodo')
-    list_filter = ('cliente',)
+    list_display = ('periodo', 'numero', 'data', 'valor', 'cliente', 'previsao', 'entrega', 'situacao', )
+    list_filter = ('cliente', 'periodo', 'previsao', 'entrega', 'situacao')
+    search_fields = ('numero',)
     ordering = ('-data',)
     date_hierarchy = 'data'
     inlines = [ItemInline]
