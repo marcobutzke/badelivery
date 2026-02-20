@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-admin.site.site_header = 'Biano Alimentos'  # set header
-admin.site.site_title = 'Biano Alimentos'   # set title
+admin.site.site_header = 'Biano Gourmet'  # set header
+admin.site.site_title = 'Biano Gourmet'   # set title
 admin.site.index_title = 'Delivery'
 
 from .models import *
@@ -82,6 +82,7 @@ class ingrediente(admin.ModelAdmin):
 
 class ComponenteInline(admin.StackedInline):
     model = Componente
+    raw_id_fields = ('acessorio',)
     extra = 0
 
 @admin.register(Acessorio)
@@ -95,14 +96,17 @@ class Acessorio(admin.ModelAdmin):
 
 class ComposicaoInline(admin.StackedInline):
     model = Composicao
+    raw_id_fields = ('produto',)
     extra = 0
 
 class FormacaoInline(admin.StackedInline):
     model = Formacao
+    raw_id_fields = ('produto',)
     extra = 0
 
 class PrecoInline(admin.StackedInline):
     model = Preco
+    raw_id_fields = ('produto',)
     extra = 0
 
 @admin.register(Produto)
@@ -123,6 +127,7 @@ class Periodo(admin.ModelAdmin):
 
 class InsumoInline(admin.StackedInline):
     model = Insumo
+    raw_id_fields = ('compra',)
     extra = 0
 
 @admin.register(Compra)
@@ -152,6 +157,7 @@ class Manufatura(admin.ModelAdmin):
 
 class ItemInline(admin.StackedInline):
     model = Item
+    raw_id_fields = ('pedido',)
     extra = 0
 
 @admin.register(Pedido)
@@ -166,6 +172,7 @@ class Pedido(admin.ModelAdmin):
 
 class PacoteInline(admin.StackedInline):
     model = Pacote
+    raw_id_fields = ('carga',)
     extra = 0
 
 @admin.register(Carga)
