@@ -8,5 +8,44 @@
                 <h1 class="text-4xl">Resultado</h1>
             </div>
         </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado</div>
+            <div class="stat-value">R$ {{ resultado.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Total Créditos</div>
+            <div class="stat-value">R$ {{ creditos.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Total Débitos</div>
+            <div class="stat-value">R$ {{ debitos.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado Econômico</div>
+            <div class="stat-value">{{ chart_resultado_atual|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado Atual</div>
+            <div class="stat-value">{{ chart_resultado_geral_atual|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado Geral</div>
+            <div class="stat-value">{{ chart_resultado_geral|safe }}</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+        </div>
+
     {% endif %}
 {% endblock %}

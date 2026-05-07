@@ -8,5 +8,54 @@
                 <h1 class="text-4xl">Produtos</h1>
             </div>
         </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Total dos Estoques</div>
+            <div class="stat-value">R$ {{ total.total }}</div>
+            <div class="stat-desc">xxxx</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Estoque de Matéria-Prima</div>
+            <div class="stat-value">R$ {{ materiaprima.saldo }}</div>
+            <div class="stat-desc">xxxx</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Estoque de Produto</div>
+            <div class="stat-value">R$ {{ produto.saldo }}</div>
+            <div class="stat-desc">xxxx</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Estoque de Acessório</div>
+            <div class="stat-value">R$ {{ acessorio.saldo }}</div>
+            <div class="stat-desc">xxxx</div>
+          </div>
+
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Categoria e Produtos Vendidos</div>
+            <div class="stat-value">{{ chart_categoria_produto|safe }}</div>
+            <div class="stat-desc">xxxxxx</div>
+          </div>
+        </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Curva ABC - Vendas de Produto</div>
+            <div class="stat-value">{{ chart_curva_abc|safe }}</div>
+            <div class="stat-desc">xxxxxx</div>
+          </div>
+        </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Curva ABC - Custos de Produto</div>
+            <div class="stat-value">{{ chart_custos_abc|safe }}</div>
+            <div class="stat-desc">xxxxxx</div>
+          </div>
+        </div>
+
+
     {% endif %}
+
 {% endblock %}

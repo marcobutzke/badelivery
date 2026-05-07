@@ -9,32 +9,48 @@
             </div>
         </div>
         <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
-              <div class="stat bg-gray-100 border black shadow rounded text-center">
-                <div class="stat-title">Downloads</div>
-                <div class="stat-value">31K</div>
-                <div class="stat-desc">Jan 1st - Feb 1st</div>
-              </div>
-              <div class="stat bg-gray-100 border black shadow rounded text-center">
-                <div class="stat-title">New Users</div>
-                <div class="stat-value">4,200</div>
-                <div class="stat-desc">↗︎ 400 (22%)</div>
-              </div>
-              <div class="stat bg-gray-100 border black shadow rounded text-center">
-                <div class="stat-title">New Registers</div>
-                <div class="stat-value">1,200</div>
-                <div class="stat-desc">↘︎ 90 (14%)</div>
-              </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valor das Vendas</div>
+            <div class="stat-value">R$ {{ vendas.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valor das Compras</div>
+            <div class="stat-value">R$ {{ compras.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado Economico Bruto</div>
+            <div class="stat-value">R$ {{ economico.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valor Recebido</div>
+            <div class="stat-value">R$ {{ recebidos.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valor Pago</div>
+            <div class="stat-value">R$ {{ pagos.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Resultado Financeiro Bruto</div>
+            <div class="stat-value">R$ {{ financeiro.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
         </div>
         <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
-            <div class="md:flex md:w-1/3 bg-gray-100 h-96 rounded shadow">
-                {{ chart_html|safe }}
-            </div>
-            <div class="md:flex md:w-1/3 bg-gray-100 h-96 rounded shadow ">
-                Teste
-            </div>
-            <div class="md:flex md:w-1/3 bg-gray-100 h-96 rounded shadow ">
-                Teste
-            </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center flex flex-col items-center">
+            <div class="stat-title">Lançamentos Econômicos - Vendas x Compras</div>
+            <div class="stat-value">{{ chart_inicio_economico|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center flex flex-col items-center">
+            <div class="stat-title">Lançamentos Financeiros - Recebimentos x Pagamentos</div>
+            <div class="stat-value">{{ chart_inicio_financeiro|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
         </div>
     {% endif %}
 {% endblock %}

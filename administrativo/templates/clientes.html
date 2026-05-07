@@ -8,5 +8,59 @@
                 <h1 class="text-4xl">Clientes</h1>
             </div>
         </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Total de Vendas</div>
+            <div class="stat-value">R$ {{ total.total }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valores Pagos</div>
+            <div class="stat-value">R$ {{ pago.valor }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valor Abertos</div>
+            <div class="stat-value">R$ {{ fechado.valor }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Valores a Receber</div>
+            <div class="stat-value">R$ {{ aberto.aberto }}</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Inadimplência - Geral</div>
+            <div class="stat-value">{{ inadimplencia.inadimplencia }} %</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
+            <div class="stat-title">Vendas por tipo e categoria</div>
+            <div class="stat-value">{{ chart_tipo_categoria|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
+            <div class="stat-title">Vendas por categoria e tipo</div>
+            <div class="stat-value">{{ chart_categoria_tipo|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Classificação dos Clientes</div>
+            <div class="stat-value">{{ chart_rfpm|safe }}</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Escalonamento Dimensional dos Clientes</div>
+            <div class="stat-value">{{ chart_pca|safe }}</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+        </div>
     {% endif %}
+
 {% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <div class="flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg w-full lg:w-3/4">
+                <h1 class="text-4xl">Mercadorias</h1>
+            </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Compras no Mês</div>
+            <div class="stat-value">R$ {{ compras_mes.compras_mes }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Compras em Aberto</div>
+            <div class="stat-value">R$ {{ compras_abertas.compras_abertas }}</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Inadimplencia</div>
+            <div class="stat-value">{{ inadimplencia.inadimplencia }} %</div>
+            <div class="stat-desc">Todos os Períodos</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center">
+            <div class="stat-title">Curva ABC - Compra de Mercadoria</div>
+            <div class="stat-value">{{ chart_mercadoria_abc|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
+          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
+            <div class="stat-title">Compras por Segmento</div>
+            <div class="stat-value">{{ chart_compras_segmento|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
+            <div class="stat-title">Consumo Mercadoria</div>
+            <div class="stat-value">{{ chart_consumo_mercadoria|safe }}</div>
+            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
+          </div>
+        </div>
+    {% endif %}
+{% endblock %}

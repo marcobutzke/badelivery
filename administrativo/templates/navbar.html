@@ -1,4 +1,4 @@
-<div class="navbar bg-red-700 shadow-sm">
+<div class="navbar bg-gray-500 shadow-sm">
     {% if user.is_authenticated %}
         <div class="navbar-start">
             <div class="dropdown">
@@ -7,16 +7,17 @@
                 </div>
                 <ul
                     tabindex="-1"
-                    class="menu menu-sm dropdown-content bg-red-700 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    class="menu menu-sm dropdown-content bg-gray-500 rounded-box z-1 mt-3 w-52 p-2 shadow">
                     <li><a href="{% url 'index' %}" class="text-base text-white">Início</a></li>
                     <li></li>
                     <li><a href="{% url 'clientes' %}" class="text-base text-white">Clientes</a></li>
                     <li><a href="{% url 'produtos' %}" class="text-base text-white">Produtos</a></li>
-                    <li><a href="{% url 'entregas' %}" class="text-base text-white">Entregas</a></li>
+                    <li><a href="{% url 'mercadorias' %}" class="text-base text-white">Mercadorias</a></li>
                     <li><a href="{% url 'producao' %}" class="text-base text-white">Produção</a></li>
                     <li></li>
                     <li><a href="{% url 'financeiro' %}" class="text-base text-white">Financeiro</a></li>
                     <li><a href="{% url 'resultado' %}" class="text-base text-white">Resultado</a></li>
+                    <li><a href="{% url 'disponibilidade' %}" class="text-base text-white">Disponibilidade</a></li>
                     <li></li>
                     <li><a href="{% url 'consulta' %}" class="text-base text-white">Consulta</a></li>
                     <li></li>

@@ -1,209 +1,253 @@
 from django.contrib import admin
-
-admin.site.site_header = 'Biano Gourmet'  # set header
-admin.site.site_title = 'Biano Gourmet'   # set title
-admin.site.index_title = 'Delivery'
+from unfold.admin import ModelAdmin, TabularInline
+from import_export import resources
+from import_export.admin import ExportMixin
 
 from .models import *
 
 @admin.register(Categoria)
-class Categoria(admin.ModelAdmin):
+class CategoriaAdmin(ModelAdmin):
     list_display = ('descricao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
-    list_per_page = 15
-
+    list_per_page = 12
+    
 @admin.register(Unidade)
-class Unidade(admin.ModelAdmin):
+class UnidadeAdmin(ModelAdmin):
     list_display = ('sigla', 'descricao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Segmento)
-class Segmento(admin.ModelAdmin):
+class SegmentoAdmin(ModelAdmin):
     list_display = ('descricao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Tipo)
-class Tipo(admin.ModelAdmin):
+class TipoAdmin(ModelAdmin):
     list_display = ('descricao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Cliente)
-class Cliente(admin.ModelAdmin):
+class ClienteAdmin(ModelAdmin):
     list_display = ('nome', 'contato', 'tipo', )
     list_filter = ('tipo',)
     search_fields = ('nome',)
     ordering = ('nome',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Fornecedor)
-class Fornecedor(admin.ModelAdmin):
+class FornecedorAdmin(ModelAdmin):
     list_display = ('nome', 'contato')
     search_fields = ('nome',)
     ordering = ('nome',)
-    list_per_page = 15
-
-@admin.register(Indicador)
-class Indicador(admin.ModelAdmin):
-    list_display = ('descricao', 'formula')
-    search_fields = ('descricao',)
-    ordering = ('descricao',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Conta)
-class Conta(admin.ModelAdmin):
-    list_display = ('codigo', 'descricao', 'natureza', 'nivel', 'tipo', 'saldoinicial')
-    list_filter = ('natureza', 'nivel', 'tipo',)
+class ContaAdmin(ModelAdmin):
+    list_display = ('codigo', 'descricao', 'natureza', 'nivel', 'tipo', 'saldoinicial', 'contabil')
+    list_filter = ('natureza', 'nivel', 'tipo', 'contabil')
     search_fields = ('descricao',)
     ordering = ('codigo',)
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Operacao)
-class Operacao(admin.ModelAdmin):
-    list_display = ('sigla', 'descricao', 'debito', 'credito')
+class OperacaoAdmin(ModelAdmin):
+    list_display = ('sigla', 'descricao', 'debito', 'credito', 'apagar', 'areceber')
     list_filter = ('debito', 'credito',)
     search_fields = ('descricao',)
     ordering = ('sigla',)
-    list_per_page = 15
+    list_per_page = 12
 
-@admin.register(Ingrediente)
-class ingrediente(admin.ModelAdmin):
-    list_display = ('descricao', 'valor', 'estoque', 'ativo', 'segmento', 'quantidade', 'unidade')
-    list_filter = ('segmento',)
+@admin.register(Mercadoria)
+class MercadoriaAdmin(ModelAdmin):
+    list_display = ('descricao', 'valor', 'estoque', 'ativo', 'segmento', 'quantidade', 'unidade', 'tipo')
+    list_filter = ('segmento', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
-    list_per_page = 15
+    list_per_page = 12
 
-class ComponenteInline(admin.StackedInline):
+class ComponenteInline(TabularInline):
     model = Componente
     raw_id_fields = ('acessorio',)
     extra = 0
+    tab = True
 
 @admin.register(Acessorio)
-class Acessorio(admin.ModelAdmin):
+class AcessorioAdmin(ModelAdmin):
     list_display = ('descricao', 'valor', 'estoque', 'ativo', 'quantidade', 'unidade', 'porcao', )
     search_fields = ('descricao',)
     ordering = ('descricao',)
     inlines = [ComponenteInline]
-    list_per_page = 15
+    list_per_page = 12
 
-
-class ComposicaoInline(admin.StackedInline):
+class ComposicaoInline(TabularInline):
     model = Composicao
     raw_id_fields = ('produto',)
     extra = 0
+    tab = True
 
-class FormacaoInline(admin.StackedInline):
+class FormacaoInline(TabularInline):
     model = Formacao
     raw_id_fields = ('produto',)
     extra = 0
+    tab = True
 
-class PrecoInline(admin.StackedInline):
+class PrecoInline(TabularInline):
     model = Preco
     raw_id_fields = ('produto',)
     extra = 0
+    tab = True
+
+class EmbalagemInline(TabularInline):
+    model = Embalagem
+    raw_id_fields = ('produto',)
+    extra = 0
+    tab = True
 
 @admin.register(Produto)
-class Produto(admin.ModelAdmin):
+class ProdutoAdmin(ModelAdmin):
     list_display = ('sigla', 'descricao', 'estoque', 'ativo', 'categoria', 'quantidade', 'unidade', 'porcao',)
     list_filter = ('categoria',)
     search_fields = ('sigla', 'descricao',)
     ordering = ('sigla',)
-    inlines = [ComposicaoInline, FormacaoInline, PrecoInline]
-    list_per_page = 15
-
-@admin.register(Periodo)
-class Periodo(admin.ModelAdmin):
-    list_display = ('sigla', 'inicio', 'final', 'situacao')
-    search_fields = ('sigla',)
-    ordering = ('-inicio',)
+    inlines = [ComposicaoInline, FormacaoInline, PrecoInline, EmbalagemInline]
     list_per_page = 12
 
-class InsumoInline(admin.StackedInline):
-    model = Insumo
+@admin.register(Periodo)
+class PeriodoAdmin(ModelAdmin):
+    list_display = ('sigla', 'inicio', 'final', 'situacao', 'anterior')
+    search_fields = ('sigla',)
+    ordering = ('-inicio',)
+
+class VolumeInline(TabularInline):
+    model = Volume
     raw_id_fields = ('compra',)
     extra = 0
+    tab = True
 
 @admin.register(Compra)
-class Compra(admin.ModelAdmin):
+class CompraAdmin(ModelAdmin):
     list_display = ('data', 'valor', 'fornecedor', 'situacao', 'periodo')
-    list_filter = ('fornecedor',)
+    list_filter = ('situacao', 'periodo', 'fornecedor',)
     ordering = ('-data',)
     date_hierarchy = 'data'
-    inlines = [InsumoInline]
-    list_per_page = 15
+    inlines = [VolumeInline]
+    list_per_page = 12
 
 @admin.register(Producao)
-class Producao(admin.ModelAdmin):
-    list_display = ('periodo', 'data', 'produto', 'quantidade')
-    list_filter = ('periodo', 'produto')
+class ProducaoAdmin(ModelAdmin):
+    list_display = ('periodo', 'data', 'produto', 'quantidade', 'produzido', 'situacao')
+    list_filter = ('periodo', 'situacao', 'produto')
     ordering = ('-data',)
     date_hierarchy = 'data'
-    list_per_page = 15
+    list_per_page = 12
 
 @admin.register(Manufatura)
-class Manufatura(admin.ModelAdmin):
-    list_display = ('periodo', 'data', 'acessorio', 'quantidade')
-    list_filter = ('periodo', 'acessorio')
+class ManufaturaAdmin(ModelAdmin):
+    list_display = ('periodo', 'data', 'acessorio', 'quantidade', 'produzido', 'situacao')
+    list_filter = ('periodo', 'situacao', 'acessorio')
     ordering = ('-data',)
     date_hierarchy = 'data'
-    list_per_page = 15
+    list_per_page = 12
 
-class ItemInline(admin.StackedInline):
+class ItemInline(TabularInline):
     model = Item
     raw_id_fields = ('pedido',)
     extra = 0
+    tab = True
 
 @admin.register(Pedido)
-class Pedido(admin.ModelAdmin):
-    list_display = ('periodo', 'numero', 'data', 'valor', 'cliente', 'previsao', 'entrega', 'situacao', )
-    list_filter = ('cliente', 'periodo', 'previsao', 'entrega', 'situacao')
+class PedidoAdmin(ModelAdmin):
+    list_display = ('periodo', 'numero', 'data', 'valor', 'cliente', 'situacao', )
+    list_select_related = ('cliente', 'periodo',)
+    list_filter = ('periodo', 'situacao', 'cliente', )
     search_fields = ('numero',)
     ordering = ('-data',)
     date_hierarchy = 'data'
     inlines = [ItemInline]
-    list_per_page = 15
+    list_per_page = 12
 
-class PacoteInline(admin.StackedInline):
-    model = Pacote
-    raw_id_fields = ('carga',)
+    actions = ('situacao_aberto_fechado',)
+    def situacao_aberto_fechado(self, request, queryset):
+        queryset.update(situacao='FECHADO')
+        self.message_user(request, message='Pedido(s) Fechado(s)')
+
+    situacao_aberto_fechado.short_description = 'Fechar Pedido(s)'
+
+class ElementoInline(TabularInline):
+    model = Elemento
+    raw_id_fields = ('devolucao',)
     extra = 0
+    tab = True
 
-@admin.register(Carga)
-class Carga(admin.ModelAdmin):
-    list_display = ('data', 'periodo')
+@admin.register(Devolucao)
+class Devolucao(ModelAdmin):
+    list_display = ('periodo', 'numero', 'data', 'valor', 'cliente', 'situacao', )
+    list_select_related = ('cliente', 'periodo',)
+    list_filter = ('periodo', 'situacao', 'cliente', )
+    search_fields = ('numero',)
     ordering = ('-data',)
     date_hierarchy = 'data'
-    inlines = [PacoteInline]
-    list_per_page = 15
+    inlines = [ElementoInline]
+    list_per_page = 12
+
+    actions = ('situacao_aberto_fechado',)
+    def situacao_aberto_fechado(self, request, queryset):
+        queryset.update(situacao='FECHADO')
+        self.message_user(request, message='Pedido(s) Fechado(s)')
+
+    situacao_aberto_fechado.short_description = 'Fechar Pedido(s)'
 
 @admin.register(Lancamento)
-class Lancamento(admin.ModelAdmin):
+class LancamentoAdmin(ModelAdmin):
     list_display = ('data', 'valor', 'descricao', 'periodo', 'operacao')
     list_filter = ('operacao',)
     ordering = ('-data',)
     date_hierarchy = 'data'
-    list_per_page = 15
+    list_per_page = 12
+
+
+class ContasaPagarResource(resources.ModelResource):
+    class Meta:
+        model = Contaapagar
 
 @admin.register(Contaapagar)
-class Contaapagar(admin.ModelAdmin):
-    list_display = ('periodo', 'data', 'valor', 'vencimento', 'pagamento', 'fornecedor', 'compra', 'descricao', 'situacao', 'operacao')
-    list_filter = ('fornecedor', 'situacao')
+class ContaapagarAdmin(ExportMixin, ModelAdmin):
+    list_display = ('periodo', 'data', 'valor', 'vencimento', 'pagamento', 'fornecedor', 'compra', 'descricao', 'situacao', 'valorpago', 'operacao')
+    list_select_related = ('fornecedor', 'periodo', 'compra', 'operacao')
+    list_filter = ('situacao', 'fornecedor', )
     ordering = ('-data',)
     date_hierarchy = 'data'
-    list_per_page = 15
+    list_per_page = 6
+    resource_classes = [ContasaPagarResource]
+
+class ContasaReceberResource(resources.ModelResource):
+    class Meta:
+        model = Contasareceber
 
 @admin.register(Contasareceber)
-class Contasareceber(admin.ModelAdmin):
-    list_display = ('periodo', 'data', 'valor', 'vencimento', 'pagamento', 'cliente', 'pedido', 'descricao', 'situacao', 'operacao')
-    list_filter = ('cliente', 'situacao')
+class ContasareceberAdmin(ExportMixin, ModelAdmin):
+    list_display = ('periodo', 'data', 'valor', 'vencimento', 'pagamento', 'cliente', 'pedido', 'descricao', 'situacao', 'valorpago', 'operacao')
+    list_select_related = ('periodo', 'cliente', 'pedido', 'operacao')
+    list_filter = ('situacao', 'cliente', )
     ordering = ('-data',)
     date_hierarchy = 'data'
-    list_per_page = 15
+    list_per_page = 6
+    resource_classes = [ContasaReceberResource]
+
+@admin.register(Movimento)
+class MovimentoAdmin(ModelAdmin):
+    list_display = ('data', 'descricao', 'natureza', 'conta', 'valor', 'lancamento')
+    list_select_related = ('conta', 'lancamento',)
+    list_filter = ('conta',)
+    ordering = ('-data',)
+    date_hierarchy = 'data'
+    list_per_page = 12
+
 
