@@ -2,6 +2,17 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
 
+class Classe(models.Model):
+    descricao = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'classe'
+        verbose_name = "Classe"
+        verbose_name_plural = "Classes"
+
+    def __str__(self):
+        return self.descricao
 
 class Unidade(models.Model):
     sigla = models.CharField(max_length=5)
@@ -16,7 +27,6 @@ class Unidade(models.Model):
     def __str__(self):
         return self.sigla
 
-
 class Segmento(models.Model):
     descricao = models.CharField(max_length=50)
 
@@ -30,56 +40,6 @@ class Segmento(models.Model):
         return self.descricao
 
 
-class MercadoriaIngredienteManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(Q (tipo='INGREDIENTE') | Q (tipo='COMERCIALIZACAO'))
-
-
-class MercadoriaEmbalagemManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(tipo='EMBALAGEM')
-
-
-class Mercadoria(models.Model):
-    tipo_mercadoria = (
-        ('INGREDIENTE', 'Ingrediente'),
-        ('EMBALAGEM', 'Embalagem'),
-        ('LIMPEZA', 'Limpeza'),
-        ('COMERCIALIZACAO', 'Comercialização')
-    )
-    descricao = models.CharField(max_length=50)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    estoque = models.IntegerField()
-    ativo = models.BooleanField()
-    segmento = models.ForeignKey(Segmento, models.DO_NOTHING)
-    quantidade = models.IntegerField()
-    unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
-    tipo = models.CharField(max_length=20, choices=tipo_mercadoria, default='Ingrediente')
-
-    class Meta:
-        managed = False
-        db_table = 'mercadoria'
-        verbose_name = "Mercadoria"
-        verbose_name_plural = "Mercadorias"
-
-    def __str__(self):
-        return self.descricao
-
-
-class MercadoriaIngrediente(Mercadoria):
-    objects = MercadoriaIngredienteManager()
-
-    class Meta:
-        proxy = True
-
-
-class MercadoriaEmbalagem(Mercadoria):
-    objects = MercadoriaEmbalagemManager()
-
-    class Meta:
-        proxy = True
-
-
 class Categoria(models.Model):
     descricao = models.CharField(max_length=50)
 
@@ -91,47 +51,6 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.descricao
-
-class Tipo(models.Model):
-    descricao = models.CharField(max_length=20)
-
-    class Meta:
-        managed = False
-        db_table = 'tipo'
-        verbose_name = "Tipo"
-        verbose_name_plural = "Tipos"
-
-    def __str__(self):
-        return self.descricao
-
-
-class Cliente(models.Model):
-    nome = models.CharField(max_length=50)
-    contato = models.CharField(max_length=50)
-    tipo = models.ForeignKey(Tipo, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'cliente'
-        verbose_name = "Cliente"
-        verbose_name_plural = "Clientes"
-
-    def __str__(self):
-        return self.nome
-
-
-class Fornecedor(models.Model):
-    nome = models.CharField(max_length=50)
-    contato = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'fornecedor'
-        verbose_name = "Fornecedor"
-        verbose_name_plural = "Fornecedores"
-
-    def __str__(self):
-        return self.nome
 
 class ContaAnaliticaManager(models.Manager):
     def get_queryset(self):
@@ -210,42 +129,116 @@ class OperacaoContasaPagar(Operacao):
     class Meta:
         proxy = True
 
+class Cliente(models.Model):
+    nome = models.CharField(max_length=50)
+    classe = models.ForeignKey(Classe, models.DO_NOTHING)
 
+    class Meta:
+        managed = False
+        db_table = 'cliente'
+        verbose_name = "Cliente"
+        verbose_name_plural = "Clientes"
 
-class Acessorio(models.Model):
+    def __str__(self):
+        return self.nome
+
+class Fornecedor(models.Model):
+    nome = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'fornecedor'
+        verbose_name = "Fornecedor"
+        verbose_name_plural = "Fornecedores"
+
+    def __str__(self):
+        return self.nome
+
+class Mercadoria(models.Model):
+    tipo_mercadoria = (
+        ('INGREDIENTE', 'Ingrediente'),
+        ('EMBALAGEM', 'Embalagem'),
+        ('LIMPEZA', 'Limpeza'),
+        ('COMERCIALIZACAO', 'Comercialização')
+    )
     descricao = models.CharField(max_length=50)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     estoque = models.IntegerField()
     ativo = models.BooleanField()
+    segmento = models.ForeignKey(Segmento, models.DO_NOTHING)
     quantidade = models.IntegerField()
     unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
-    porcao = models.IntegerField(default=1)
-    modopreparo = models.TextField()
+    tipo = models.CharField(max_length=20, choices=tipo_mercadoria, default='Ingrediente')
 
     class Meta:
         managed = False
-        db_table = 'acessorio'
-        verbose_name = "Acessório"
-        verbose_name_plural = "Acessórios"
+        db_table = 'mercadoria'
+        verbose_name = "Mercadoria"
+        verbose_name_plural = "Mercadorias"
 
     def __str__(self):
         return self.descricao
 
-class Componente(models.Model):
-    acessorio = models.ForeignKey(Acessorio, models.DO_NOTHING)
-    mercadoria = models.ForeignKey(MercadoriaIngrediente, models.DO_NOTHING)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
+class Ingrediente(models.Model):
+    descricao = models.CharField(max_length=50)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    estoque = models.IntegerField()
+    ativo = models.BooleanField()
+    segmento = models.ForeignKey(Segmento, models.DO_NOTHING)
+    quantidade = models.IntegerField()
+    unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = 'componente'
-        verbose_name = "Componente"
-        verbose_name_plural = "Componentes"
+        db_table = 'ingrediente'
+        verbose_name = "Ingrediente"
+        verbose_name_plural = "Ingredientes"
 
     def __str__(self):
-        return f"{self.mercadoria}"
+        return self.descricao
+
+class Embalagem(models.Model):
+    descricao = models.CharField(max_length=50)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    estoque = models.IntegerField()
+    ativo = models.BooleanField()
+    segmento = models.ForeignKey(Segmento, models.DO_NOTHING)
+    quantidade = models.IntegerField()
+    unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'embalagem'
+        verbose_name = "Embalagem"
+        verbose_name_plural = "Embalagens"
+
+    def __str__(self):
+        return self.descricao
+
+
+class Material(models.Model):
+    descricao = models.CharField(max_length=50)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    estoque = models.IntegerField()
+    ativo = models.BooleanField()
+    segmento = models.ForeignKey(Segmento, models.DO_NOTHING)
+    quantidade = models.IntegerField()
+    unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'material'
+        verbose_name = "Material"
+        verbose_name_plural = "Materiais"
+
+    def __str__(self):
+        return self.descricao
 
 class Produto(models.Model):
+    tipo_produto = (
+        ('FINAL', 'Final'),
+        ('INTERMEDIARIO', 'Intermediario')
+    )
     sigla = models.CharField(max_length=10)
     descricao = models.CharField(max_length=50)
     estoque = models.IntegerField()
@@ -253,8 +246,8 @@ class Produto(models.Model):
     categoria = models.ForeignKey(Categoria, models.DO_NOTHING)
     quantidade = models.IntegerField()
     unidade = models.ForeignKey(Unidade, models.DO_NOTHING)
-    porcao = models.IntegerField(default=1)
-    modopreparo = models.TextField()
+    custounitario = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo = models.CharField(max_length=20, choices=tipo_produto, default='Final')
 
     class Meta:
         managed = False
@@ -265,62 +258,140 @@ class Produto(models.Model):
     def __str__(self):
         return f"{self.sigla}-{self.descricao}"
 
-class Composicao(models.Model):
-    produto = models.ForeignKey(Produto, models.DO_NOTHING)
-    mercadoria = models.ForeignKey(MercadoriaIngrediente, models.DO_NOTHING)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'composicao'
-        verbose_name = "Composição"
-        verbose_name_plural = "Composições"
-
-    def __str__(self):
-        return f"{self.mercadoria}-{self.produto}"
-
-class Formacao(models.Model):
-    produto = models.ForeignKey(Produto, models.DO_NOTHING)
-    acessorio = models.ForeignKey(Acessorio, models.DO_NOTHING)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'formacao'
-        verbose_name = "Formação"
-        verbose_name_plural = "Formações"
-
-    def __str__(self):
-        return f"{self.acessorio}-{self.produto}"
-
-
-class Preco(models.Model):
-    tipo = models.ForeignKey(Tipo, models.DO_NOTHING)
+class Tabela(models.Model):
+    classe = models.ForeignKey(Classe, models.DO_NOTHING)
     produto = models.ForeignKey(Produto, models.DO_NOTHING)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
-        db_table = 'preco'
-        verbose_name = "Preço"
-        verbose_name_plural = "Preços"
+        db_table = 'tabela'
+        verbose_name = "Tabela"
+        verbose_name_plural = "Tabelas"
 
     def __str__(self):
-        return f"{self.tipo}-{self.produto}"
+        return f"{self.classe}-{self.produto}"
 
-class Embalagem(models.Model):
-    produto = models.ForeignKey(Produto, models.DO_NOTHING)
-    mercadoria = models.ForeignKey(MercadoriaEmbalagem, models.DO_NOTHING)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
+class Receita(models.Model):
+    descricao = models.CharField(max_length=50)
+    categoria = models.ForeignKey(Categoria, models.DO_NOTHING)
+    modopreparo = models.TextField()
 
     class Meta:
         managed = False
-        db_table = 'embalagem'
+        db_table = 'receita'
+        verbose_name = "Receita"
+        verbose_name_plural = "Receitas"
+
+    def __str__(self):
+        return self.descricao
+
+class ComposicaoIngrediente(models.Model):
+    receita = models.ForeignKey(Receita, models.DO_NOTHING)
+    ingrediente = models.ForeignKey(Ingrediente, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'composicao_ingrediente'
+        verbose_name = "Ingrediente"
+        verbose_name_plural = "Ingredientes"
+
+    def __str__(self):
+        return self.ingrediente
+
+class ComposicaoEmbalagem(models.Model):
+    receita = models.ForeignKey(Receita, models.DO_NOTHING)
+    embalagem = models.ForeignKey(Embalagem, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'composicao_embalagem'
         verbose_name = "Embalagem"
         verbose_name_plural = "Embalagens"
 
     def __str__(self):
-        return f"{self.mercadoria}-{self.produto}"
+        return self.embalagem
+
+class ComposicaoIntermediario(models.Model):
+    receita = models.ForeignKey(Receita, models.DO_NOTHING)
+    produto = models.ForeignKey(Produto, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'composicao_intermediario'
+        verbose_name = "Intermediario"
+        verbose_name_plural = "Intermediarios"
+
+    def __str__(self):
+        return self.produto
+
+class Destino(models.Model):
+    receita = models.ForeignKey(Receita, models.DO_NOTHING)
+    produto = models.ForeignKey(Produto, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'destino'
+        verbose_name = "Destino"
+        verbose_name_plural = "Destinos"
+
+    def __str__(self):
+        return f"{self.receita}-{self.produto}"
+
+class Porcao(models.Model):
+    descricao = models.CharField(max_length=10)
+    receita = models.ForeignKey(Receita, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'porcao'
+        verbose_name = "Porcao"
+        verbose_name_plural = "Porcoes"
+
+    def __str__(self):
+        return f"{self.receita}-{self.descricao}"
+
+class ConsumoEmbalagem(models.Model):
+    porcao = models.ForeignKey(Porcao, models.DO_NOTHING)
+    embalagem = models.ForeignKey(Embalagem, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=4)
+
+    class Meta:
+        managed = False
+        db_table = 'consumo_embalagem'
+        verbose_name = "Embalagem"
+        verbose_name_plural = "Embalagens"
+
+    def __str__(self):
+        return self.embalagem
+
+class ConsumoIngrediente(models.Model):
+    porcao = models.ForeignKey(Porcao, models.DO_NOTHING)
+    ingrediente = models.ForeignKey(Ingrediente, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=4)
+
+    class Meta:
+        managed = False
+        db_table = 'consumo_ingrediente'
+        verbose_name = "Ingrediente"
+        verbose_name_plural = "Ingredientes"
+
+    def __str__(self):
+        return self.ingrediente
+
+class ConsumoIntermediario(models.Model):
+    porcao = models.ForeignKey(Porcao, models.DO_NOTHING)
+    produto = models.ForeignKey(Produto, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=4)
+
+    class Meta:
+        managed = False
+        db_table = 'consumo_intermediario'
+        verbose_name = "Intermediario"
+        verbose_name_plural = "Intermediarios"
+
+    def __str__(self):
+        return self.produto
 
 class Periodo(models.Model):
     situacao_periodo = (
@@ -345,9 +416,10 @@ class Periodo(models.Model):
 
 class Compra(models.Model):
     tipo_pago = (
-        ('ABERTA', 'Aberta'),
-        ('FECHADA', 'Fechada'),
-        ('PAGA', 'Paga'),
+        ('ABERTO', 'Aberta'),
+        ('FECHADO', 'Fechada'),
+        ('PAGO', 'Paga'),
+        ('PARCIAL', 'Parcial')
     )
     data = models.DateField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -376,51 +448,63 @@ class Volume(models.Model):
         verbose_name_plural = "Volumes"
 
     def __str__(self):
-        return f"{self.mercadoria}-{self.compra}"
+        return f"{self.mercadoria}"
 
-
-class Producao(models.Model):
-    tipo_producao = (
-        ('PROGRAMADO', 'Programado'),
-        ('REALIZADO', 'Realizado'),
-    )
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+class CompraRevenda(models.Model):
+    compra = models.ForeignKey(Compra, models.DO_NOTHING)
     produto = models.ForeignKey(Produto, models.DO_NOTHING)
-    data = models.DateField()
-    quantidade = models.IntegerField()
-    produzido = models.IntegerField()
-    situacao = models.CharField(max_length=20, choices=tipo_producao, default='Programado')
+    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
-        db_table = 'producao'
-        verbose_name = "Produção"
-        verbose_name_plural = "Produções"
+        db_table = 'compra_revenda'
+        verbose_name = "Revenda"
+        verbose_name_plural = "Revendas"
 
     def __str__(self):
-        return f"{self.produto}-{self.data}"
+        return f"{self.produto}"
 
-
-class Manufatura(models.Model):
-    tipo_producao = (
-        ('PROGRAMADO', 'Programado'),
-        ('REALIZADO', 'Realizado'),
-    )
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
-    acessorio = models.ForeignKey(Acessorio, models.DO_NOTHING)
-    data = models.DateField()
-    quantidade = models.IntegerField()
-    produzido = models.IntegerField()
-    situacao = models.CharField(max_length=20, choices=tipo_producao, default='Programado')
+class CompraEmbalagem(models.Model):
+    compra = models.ForeignKey(Compra, models.DO_NOTHING)
+    embalagem = models.ForeignKey(Embalagem, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
-        db_table = 'manufatura'
-        verbose_name = "Manufatura"
-        verbose_name_plural = "Manufaturas"
+        db_table = 'compra_embalagem'
+        verbose_name = "Embalagem"
+        verbose_name_plural = "Embalagens"
 
     def __str__(self):
-        return f"{self.acessorio}-{self.data}"
+        return self.embalagem
+
+class CompraIngrediente(models.Model):
+    compra = models.ForeignKey(Compra, models.DO_NOTHING)
+    ingrediente = models.ForeignKey(Ingrediente, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        managed = False
+        db_table = 'compra_ingrediente'
+        verbose_name = "Ingrediente"
+        verbose_name_plural = "Ingredientes"
+
+    def __str__(self):
+        return self.ingrediente
+
+class CompraMaterial(models.Model):
+    compra = models.ForeignKey(Compra, models.DO_NOTHING)
+    material = models.ForeignKey(Material, models.DO_NOTHING)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        managed = False
+        db_table = 'compra_material'
+        verbose_name = "Material"
+        verbose_name_plural = "Materiais"
+
+    def __str__(self):
+        return self.material
 
 class Pedido(models.Model):
     tipo_pedido = (
@@ -458,85 +542,6 @@ class Item(models.Model):
     def __str__(self):
         return f"{self.produto}-{self.pedido}"
 
-class Lancamento(models.Model):
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
-    data = models.DateField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    descricao = models.CharField(max_length=200, blank=True, null=True)
-    operacao = models.ForeignKey(Operacao, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'lancamento'
-        verbose_name = "Lançamento"
-        verbose_name_plural = "Lançamentos"
-
-    def __str__(self):
-        return self.descricao
-
-class Contaapagar(models.Model):
-    tipo_pago = (
-        ('ABERTO', 'Aberto'),
-        ('PAGO', 'Pago'),
-        ('PARCIAL', 'Parcial')
-    )
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
-    data = models.DateField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    vencimento = models.DateField()
-    pagamento = models.DateField(blank=True, null=True)
-    descricao = models.CharField(max_length=200, blank=True, null=True)
-    fornecedor = models.ForeignKey(Fornecedor, models.DO_NOTHING, blank=True, null=True)
-    compra = models.ForeignKey(Compra, models.DO_NOTHING, blank=True, null=True)
-    situacao = models.CharField(max_length=20, choices=tipo_pago, default='Aberto')
-    valorpago = models.DecimalField(max_digits=10, decimal_places=2)
-    operacao = models.ForeignKey(OperacaoContasaPagar, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'contaapagar'
-        verbose_name = "Contas a Pagar"
-        verbose_name_plural = "Contas a Pagar"
-
-
-class Contasareceber(models.Model):
-    tipo_pago = (
-        ('ABERTO', 'Aberto'),
-        ('PAGO', 'Pago'),
-        ('PARCIAL', 'Parcial')
-    )
-    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
-    data = models.DateField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    vencimento = models.DateField()
-    pagamento = models.DateField(blank=True, null=True)
-    descricao = models.CharField(max_length=200, blank=True, null=True)
-    cliente = models.ForeignKey(Cliente, models.DO_NOTHING, blank=True, null=True)
-    pedido = models.ForeignKey(Pedido, models.DO_NOTHING, blank=True, null=True)
-    situacao = models.CharField(max_length=20, choices=tipo_pago, default='Aberto')
-    valorpago = models.DecimalField(max_digits=10, decimal_places=2)
-    operacao = models.ForeignKey(OperacaoContasaReceber, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'contasareceber'
-        verbose_name = "Contas a Receber"
-        verbose_name_plural = "Contas a Receber"
-
-class Movimento(models.Model):
-    data = models.DateField()
-    descricao = models.CharField(max_length=200)
-    natureza = models.CharField(max_length=20)
-    conta = models.ForeignKey(ContaAnalitica, models.DO_NOTHING)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    lancamento = models.ForeignKey(Lancamento, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'movimento'
-        verbose_name = "Movimento"
-        verbose_name_plural = "Movimentos"
-
 class Devolucao(models.Model):
     tipo_pedido = (
         ('ABERTO', 'Aberto'),
@@ -573,7 +578,105 @@ class Elemento(models.Model):
     def __str__(self):
         return f"{self.produto}-{self.devolucao}"
 
+class Lancamento(models.Model):
+    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+    data = models.DateField()
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    descricao = models.CharField(max_length=200, blank=True, null=True)
+    operacao = models.ForeignKey(Operacao, models.DO_NOTHING)
 
+    class Meta:
+        managed = False
+        db_table = 'lancamento'
+        verbose_name = "Lançamento"
+        verbose_name_plural = "Lançamentos"
+
+    def __str__(self):
+        return self.descricao
+
+class Contaapagar(models.Model):
+    tipo_pago = (
+        ('ABERTO', 'Aberto'),
+        ('PAGO', 'Pago'),
+        ('PARCIAL', 'Parcial')
+    )
+    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+    data = models.DateField()
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    vencimento = models.DateField()
+    pagamento = models.DateField(blank=True, null=True)
+    descricao = models.CharField(max_length=200, blank=True, null=True)
+    situacao = models.CharField(max_length=20, choices=tipo_pago, default='Aberto')
+    valorpago = models.DecimalField(max_digits=10, decimal_places=2)
+    operacao = models.ForeignKey(OperacaoContasaPagar, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'pagar'
+        verbose_name = "Contas a Pagar"
+        verbose_name_plural = "Contas a Pagar"
+
+
+class Contasareceber(models.Model):
+    tipo_pago = (
+        ('ABERTO', 'Aberto'),
+        ('PAGO', 'Pago'),
+        ('PARCIAL', 'Parcial')
+    )
+    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+    data = models.DateField()
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    vencimento = models.DateField()
+    pagamento = models.DateField(blank=True, null=True)
+    descricao = models.CharField(max_length=200, blank=True, null=True)
+    situacao = models.CharField(max_length=20, choices=tipo_pago, default='Aberto')
+    valorpago = models.DecimalField(max_digits=10, decimal_places=2)
+    operacao = models.ForeignKey(OperacaoContasaReceber, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'receber'
+        verbose_name = "Contas a Receber"
+        verbose_name_plural = "Contas a Receber"
+
+class Movimento(models.Model):
+    data = models.DateField()
+    descricao = models.CharField(max_length=200)
+    natureza = models.CharField(max_length=20)
+    conta = models.ForeignKey(ContaAnalitica, models.DO_NOTHING)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    lancamento = models.ForeignKey(Lancamento, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'movimento'
+        verbose_name = "Movimento"
+        verbose_name_plural = "Movimentos"
+
+class Programacao(models.Model):
+    periodo = models.ForeignKey(Periodo, models.DO_NOTHING)
+    data = models.DateField()
+    porcao = models.ForeignKey(Porcao, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'programacao'
+        verbose_name = "Programacao da Producao"
+        verbose_name_plural = "Programacao da Producao"
+
+class Producao(models.Model):
+    programacao = models.ForeignKey(Programacao, models.DO_NOTHING)
+    produto = models.ForeignKey(Produto, models.DO_NOTHING)
+    quantidade = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'producao'
+        verbose_name = "Producao"
+        verbose_name_plural = "Producao"
+
+
+# Visões do Modelo
 class VendasPeriodoAtual(models.Model):
     id = models.IntegerField(primary_key=True)
     periodo = models.CharField(max_length=10)
@@ -584,18 +687,18 @@ class VendasPeriodoAtual(models.Model):
         managed = False
         db_table = 'vendas_periodo_atual'
 
-class AreceberPeriodoAtual(models.Model):
+class ReceberPeriodoAtual(models.Model):
     id = models.IntegerField(primary_key=True)
     aberto = models.DecimalField(max_digits=10, decimal_places=2)
     inadimplencia = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
-        db_table = 'areceber_periodo_atual'
+        db_table = 'receber_periodo_atual'
 
 class VendasTipoCliente(models.Model):
     id = models.IntegerField(primary_key=True)
-    tipo = models.CharField(max_length=20)
+    classe = models.CharField(max_length=20)
     cliente = models.CharField(max_length=50)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -605,7 +708,7 @@ class VendasTipoCliente(models.Model):
 
 class VendasTipoCategoria(models.Model):
     id = models.IntegerField(primary_key=True)
-    tipo = models.CharField(max_length=20)
+    classe = models.CharField(max_length=20)
     categoria = models.CharField(max_length=20)
     produto = models.CharField(max_length=50)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -617,7 +720,7 @@ class VendasTipoCategoria(models.Model):
 class VendasCategoriaTipo(models.Model):
     id = models.IntegerField(primary_key=True)
     categoria = models.CharField(max_length=20)
-    tipo = models.CharField(max_length=20)
+    classe = models.CharField(max_length=20)
     produto = models.CharField(max_length=50)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -644,6 +747,7 @@ class ClientesRFM(models.Model):
     class Meta:
         managed = False
         db_table = 'cliente_rfm'
+
 
 class IndicadoresEstoque(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -676,72 +780,6 @@ class CategoriaProduto(models.Model):
         managed = False
         db_table = 'categoria_produto'
 
-class CustosCurvaABC(models.Model):
-    id = models.IntegerField(primary_key=True)
-    produto = models.CharField(max_length=25)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-    porcentagem = models.DecimalField(max_digits=10, decimal_places=2)
-    cumulativo = models.DecimalField(max_digits=10, decimal_places=2)
-    curva = models.CharField(max_length=1)
-
-    class Meta:
-        managed = False
-        db_table = 'custos_curva_abc'
-
-class ProducaoQuantidade(models.Model):
-    id = models.IntegerField(primary_key=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'producao_quantidade'
-
-class ProducaoValor(models.Model):
-    id = models.IntegerField(primary_key=True)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'producao_valor'
-
-class ProducaoCusto(models.Model):
-    id = models.IntegerField(primary_key=True)
-    custo = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'producao_custo'
-
-class ProducaoCategoria(models.Model):
-    id = models.IntegerField(primary_key=True)
-    categoria = models.CharField(max_length=20)
-    produto = models.CharField(max_length=25)
-    quantidade = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'producao_categoria'
-
-class ProducaoDiaria(models.Model):
-    id = models.IntegerField(primary_key=True)
-    dia = models.IntegerField()
-    total = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'producao_diaria'
-
-class ProducaoDiariaCategoria(models.Model):
-    id = models.IntegerField(primary_key=True)
-    dia = models.IntegerField()
-    categoria = models.CharField(max_length=20)
-    produto = models.CharField(max_length=25)
-    quantidade = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'producao_diaria_categoria'
-
 class IndicadoresCompra(models.Model):
     id = models.IntegerField(primary_key=True)
     compras_mes = models.DecimalField(max_digits=10, decimal_places=2)
@@ -751,38 +789,6 @@ class IndicadoresCompra(models.Model):
     class Meta:
         managed = False
         db_table = 'indicadores_compras'
-
-class MercadoriaCurvaABC(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ingrediente = models.CharField(max_length=25)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-    porcentagem = models.DecimalField(max_digits=10, decimal_places=2)
-    cumulativo = models.DecimalField(max_digits=10, decimal_places=2)
-    curva = models.CharField(max_length=1)
-
-    class Meta:
-        managed = False
-        db_table = 'mercadoria_abc'
-
-class ComprasSegmento(models.Model):
-    id = models.IntegerField(primary_key=True)
-    segmento = models.CharField(max_length=20)
-    ingrediente = models.CharField(max_length=25)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'compras_segmento'
-
-class ConsumoMercadoria(models.Model):
-    id = models.IntegerField(primary_key=True)
-    segmento = models.CharField(max_length=20)
-    ingrediente = models.CharField(max_length=25)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'consumo_mercadoria'
 
 class ResultadoAtual(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -846,18 +852,6 @@ class FinanceiroOperacao(models.Model):
     class Meta:
         managed = False
         db_table = 'financeiro_operacao'
-
-class FinanceiroLancamento(models.Model):
-    id = models.IntegerField(primary_key=True)
-    data = models.DateField()
-    pessoa = models.CharField(max_length=40)
-    operacao = models.CharField(max_length=40)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    valor_original = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'financeiro_lancamento'
 
 class DisponibilidadeCaixa(models.Model):
     id = models.IntegerField(primary_key=True)

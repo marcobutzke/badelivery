@@ -8,42 +8,6 @@
                 <h1 class="text-4xl">Produção</h1>
             </div>
         </div>
-        <div class="md:flex md:overflow-x-auto md:flex-row gap-2">
-          <div class="stat bg-gray-100 border black shadow rounded text-center">
-            <div class="stat-title">Produção Total</div>
-            <div class="stat-value">{{ total.total }} unidades</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-          <div class="stat bg-gray-100 border black shadow rounded text-center">
-            <div class="stat-title">Valor Produzido</div>
-            <div class="stat-value">R$ {{ valor.valor }}</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-          <div class="stat bg-gray-100 border black shadow rounded text-center">
-            <div class="stat-title">Valor do Custo</div>
-            <div class="stat-value">R$ {{ custo.custo }}</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-        </div>
-        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
-          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
-            <div class="stat-title">Producao Categoria</div>
-            <div class="stat-value">{{ chart_producao_categoria|safe }}</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-          <div class="stat bg-gray-100 border black shadow rounded text-center grid place-items-center">
-            <div class="stat-title">Producao Diária por Categoria</div>
-            <div class="stat-value">{{ chart_producao_diaria_categoria|safe }}</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-        </div>
-        <div class="md:flex md:overflow-x-auto md:flex-row gap-4 mt-10 ">
-          <div class="stat bg-gray-100 border black shadow rounded text-center">
-            <div class="stat-title">Producao Diaria</div>
-            <div class="stat-value">{{ chart_producao_diaria|safe }}</div>
-            <div class="stat-desc">Referencia: {{ referencia.sigla }}</div>
-          </div>
-        </div>
 
     {% endif %}
 {% endblock %}

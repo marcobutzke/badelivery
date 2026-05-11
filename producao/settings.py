@@ -63,27 +63,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'producao.wsgi.application'
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'ba',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-#}
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres.imewrseyfhbxprzvxwrt',
-        'PASSWORD': 'Innverness#30',
-        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
-        'PORT': '6543',
+        'NAME': 'bgourmet',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'postgres',
+#        'USER': 'postgres.imewrseyfhbxprzvxwrt',
+#        'PASSWORD': 'Innverness#30',
+#        'HOST': 'aws-0-us-west-2.pooler.supabase.com',
+#        'PORT': '6543',
+#    }
+#}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -131,37 +131,131 @@ UNFOLD = {
             {
                 "title": "Operação", "separator": True, "collapsible": True, "icon": "table",
                 "items": [
-                    {"title": "Período", "icon": "calendar_month", "link": reverse_lazy("admin:administrativo_periodo_changelist"), },
-                    {"title": "Compra", "icon": "orders", "link": reverse_lazy("admin:administrativo_compra_changelist"), },
-                    {"title": "Produção Diária", "icon": "stockpot", "link": reverse_lazy("admin:administrativo_producao_changelist"), },
-                    {"title": "Manufatura Diária", "icon": "cooking", "link": reverse_lazy("admin:administrativo_manufatura_changelist"), },
-                    {"title": "Pedido", "icon": "view_list", "link": reverse_lazy("admin:administrativo_pedido_changelist"), },
-                    {"title": "Devolução", "icon": "assignment_return", "link": reverse_lazy("admin:administrativo_devolucao_changelist"), },
-                    {"title": "Contas a Pagar", "icon": "wallet", "link": reverse_lazy("admin:administrativo_contaapagar_changelist"), },
-                    {"title": "Contas a Receber", "icon": "credit_card", "link": reverse_lazy("admin:administrativo_contasareceber_changelist"), },
-                    {"title": "Lançamento", "icon": "lists", "link": reverse_lazy("admin:administrativo_lancamento_changelist"), },
-                    {"title": "Movimento", "icon": "list", "link": reverse_lazy("admin:administrativo_movimento_changelist"), },
+                    {
+                        "title": "Período",
+                        "icon": "calendar_month",
+                        "link": reverse_lazy("admin:administrativo_periodo_changelist"),
+                    },
+                    {
+                        "title": "Compra",
+                        "icon": "orders",
+                        "link": reverse_lazy("admin:administrativo_compra_changelist"),
+                    },
+                    {
+                        "title": "Produção",
+                        "icon": "stockpot",
+                        "link": reverse_lazy("admin:administrativo_programacao_changelist"),
+                    },
+                    {
+                        "title": "Pedido",
+                        "icon": "view_list",
+                        "link": reverse_lazy("admin:administrativo_pedido_changelist"),
+                    },
+                    {
+                        "title": "Devolução",
+                        "icon": "assignment_return",
+                        "link": reverse_lazy("admin:administrativo_devolucao_changelist"),
+                    },
+                    {
+                        "title": "Contas a Pagar",
+                        "icon": "wallet",
+                        "link": reverse_lazy("admin:administrativo_contaapagar_changelist"),
+                    },
+                    {
+                        "title": "Contas a Receber",
+                        "icon": "credit_card",
+                        "link": reverse_lazy("admin:administrativo_contasareceber_changelist"),
+                    },
+                    {
+                        "title": "Lançamento",
+                        "icon": "lists",
+                        "link": reverse_lazy("admin:administrativo_lancamento_changelist"),
+                    },
+                    {
+                        "title": "Movimento",
+                        "icon": "list",
+                        "link": reverse_lazy("admin:administrativo_movimento_changelist"),
+                    },
                 ],
             },
             {
                 "title": "Cadastro", "separator": True, "collapsible": True,
                 "items": [
-                    {"title": "Cliente", "icon": "person", "link": reverse_lazy("admin:administrativo_cliente_changelist"), },
-                    {"title": "Fornecedor", "icon": "person_book", "link": reverse_lazy("admin:administrativo_fornecedor_changelist"),},
-                    {"title": "Mercadoria", "icon": "inventory", "link": reverse_lazy("admin:administrativo_mercadoria_changelist"),},
-                    {"title": "Acessório", "icon": "blender", "link": reverse_lazy("admin:administrativo_acessorio_changelist"),},
-                    {"title": "Produto", "icon": "grocery", "link": reverse_lazy("admin:administrativo_produto_changelist"),},
-                    {"title": "Categoria", "icon": "category", "link": reverse_lazy("admin:administrativo_categoria_changelist"), },
+                    {
+                        "title": "Cliente",
+                        "icon": "person", "link":
+                        reverse_lazy("admin:administrativo_cliente_changelist"),
+                    },
+                    {
+                        "title": "Fornecedor",
+                        "icon": "person_book",
+                        "link": reverse_lazy("admin:administrativo_fornecedor_changelist"),
+                    },
+                    {
+                        "title": "Produto",
+                        "icon": "grocery",
+                        "link": reverse_lazy("admin:administrativo_produto_changelist"),
+                    },
+                    {
+                        "title": "Receita",
+                        "icon": "menu_book",
+                        "link": reverse_lazy("admin:administrativo_receita_changelist"),
+                    },
+                    {
+                        "title": "Porcao",
+                        "icon": "lists",
+                        "link": reverse_lazy("admin:administrativo_porcao_changelist"),
+                    },
                 ],
             },
             {
                 "title": "Tabelas", "separator": True, "collapsible": True,
                 "items": [
-                    {"title": "Unidade", "icon": "data_table", "link": reverse_lazy("admin:administrativo_unidade_changelist"), },
-                    {"title": "Segmento", "icon": "data_table", "link": reverse_lazy("admin:administrativo_segmento_changelist"), },
-                    {"title": "Tipo", "icon": "data_table", "link": reverse_lazy("admin:administrativo_tipo_changelist"), },
-                    {"title": "Conta", "icon": "data_table", "link": reverse_lazy("admin:administrativo_conta_changelist"), },
-                    {"title": "Operação", "icon": "data_table", "link": reverse_lazy("admin:administrativo_operacao_changelist"), },
+                    {
+                        "title": "Ingrediente",
+                        "icon": "inventory",
+                        "link": reverse_lazy("admin:administrativo_ingrediente_changelist"),
+                    },
+                    {
+                        "title": "Embalagem",
+                        "icon": "inventory",
+                        "link": reverse_lazy("admin:administrativo_embalagem_changelist"),
+                    },
+                    {
+                        "title": "Material",
+                        "icon": "inventory",
+                        "link": reverse_lazy("admin:administrativo_material_changelist"),
+                    },
+                    {
+                        "title": "Unidade",
+                        "icon": "data_table",
+                        "link": reverse_lazy("admin:administrativo_unidade_changelist"),
+                    },
+                    {
+                        "title": "Categoria",
+                        "icon": "data_table",
+                        "link": reverse_lazy("admin:administrativo_categoria_changelist"),
+                    },
+                    {
+                        "title": "Segmento",
+                        "icon": "data_table", "link":
+                        reverse_lazy("admin:administrativo_segmento_changelist"),
+                    },
+                    {
+                        "title": "Classe",
+                        "icon": "data_table",
+                        "link": reverse_lazy("admin:administrativo_classe_changelist"),
+                    },
+                    {
+                        "title": "Conta",
+                        "icon": "data_table",
+                        "link": reverse_lazy("admin:administrativo_conta_changelist"),
+                    },
+                    {
+                        "title": "Operação",
+                        "icon": "data_table",
+                        "link": reverse_lazy("admin:administrativo_operacao_changelist"),
+                    },
                 ],
             },
         ],

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Sum
 from .charting import (
-    chart_example,
     chart_tipo_cliente,
     chart_tipo_categoria,
     chart_categoria_tipo,
@@ -9,17 +8,9 @@ from .charting import (
     chart_pca,
     chart_curva_abc,
     chart_categoria_produto,
-    chart_custos_abc,
-    chart_producao_categoria,
-    chart_producao_diaria_categoria,
-    chart_producao_diaria,
-    chart_mercadoria_abc,
-    chart_compras_segmento,
-    chart_consumo_mercadoria,
     chart_resultado_geral,
     chart_resultado_atual,
     chart_resultado_geral_atual,
-    chart_financeiro_lancamento_operacao,
     chart_financeiro_operacao,
     chart_inicio_economico,
     chart_inicio_financeiro,
@@ -27,11 +18,8 @@ from .charting import (
 )
 from .models import (
     VendasPeriodoAtual,
-    AreceberPeriodoAtual,
+    ReceberPeriodoAtual,
     IndicadoresEstoque,
-    ProducaoQuantidade,
-    ProducaoValor,
-    ProducaoCusto,
     IndicadoresCompra,
     ResultadoAtual,
     FinanceiroReceber,
@@ -70,8 +58,8 @@ def clientes(request):
     total = VendasPeriodoAtual.objects.aggregate(total=Sum('valor'))
     pago = VendasPeriodoAtual.objects.filter(situacao='PAGO').values('valor').first()
     fechado = VendasPeriodoAtual.objects.filter(situacao='FECHADO').values('valor').first()
-    aberto = AreceberPeriodoAtual.objects.all().values('aberto').first()
-    inadimplencia = AreceberPeriodoAtual.objects.all().values('inadimplencia').first()
+    aberto = ReceberPeriodoAtual.objects.all().values('aberto').first()
+    inadimplencia = ReceberPeriodoAtual.objects.all().values('inadimplencia').first()
     referencia = Periodo.objects.filter(situacao='ATUAL').values('sigla').first()
     context = {
         'total': total,
@@ -105,7 +93,6 @@ def produtos(request):
         'acessorio': acessorio,
         'chart_curva_abc': chart_curva_abc(),
         'chart_categoria_produto': chart_categoria_produto(),
-        'chart_custos_abc': chart_custos_abc(),
         'referencia': referencia
     }
     return render(
@@ -123,9 +110,6 @@ def mercadorias(request):
         'compras_mes': compras_mes,
         'compras_abertas': compras_abertas,
         'inadimplencia': inadimplencia,
-        'chart_mercadoria_abc': chart_mercadoria_abc(),
-        'chart_consumo_mercadoria': chart_consumo_mercadoria(),
-        'chart_compras_segmento': chart_compras_segmento(),
         'referencia': referencia
     }
     return render(request=request, template_name='mercadorias.html', context=context)
@@ -141,7 +125,6 @@ def financeiro(request):
         'receber_inadimplencia': receber_inadimplencia,
         'pagar_aberto': pagar_aberto,
         'pagar_inadimplencia': pagar_inadimplencia,
-        'chart_financeiro_lancamento_operacao': chart_financeiro_lancamento_operacao(),
         'chart_financeiro_operacao': chart_financeiro_operacao(),
         'referencia': referencia
     }
@@ -164,17 +147,8 @@ def resultado(request):
     return render(request=request, template_name='resultado.html', context=context)
 
 def producao(request):
-    total = ProducaoQuantidade.objects.all().values('total').first()
-    valor = ProducaoValor.objects.all().values('valor').first()
-    custo = ProducaoCusto.objects.all().values('custo').first()
     referencia = Periodo.objects.filter(situacao='ATUAL').values('sigla').first()
     context = {
-        'total': total,
-        'valor': valor,
-        'custo': custo,
-        'chart_producao_categoria': chart_producao_categoria(),
-        'chart_producao_diaria_categoria': chart_producao_diaria_categoria(),
-        'chart_producao_diaria': chart_producao_diaria(),
         'referencia': referencia
     }
     return render(request=request, template_name='producao.html', context=context)
